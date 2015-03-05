@@ -10,20 +10,20 @@ configure do
 end
 
 # === Model
-# class GroupsUser < ActiveRecord::Base
-#   belongs_to :user
-#   belongs_to :group
-# end
+class TeamsUser < ActiveRecord::Base
+  belongs_to :user
+  belongs_to :team
+end
 
-# class User < ActiveRecord::Base
-#   has_many :groups_users
-#   has_many :groups, :through => :groups_users
-# end
+class User < ActiveRecord::Base
+  has_many :teams_users
+  has_many :teams, :through => :teams_users
+end
 
-# class Group < ActiveRecord::Base
-#   has_many :groups_users
-#   has_many :users, :through => :groups_users
-# end
+class Team < ActiveRecord::Base
+  has_many :teams_users
+  has_many :users, :through => :teams_users
+end
 
 # === Fitler
 before do
