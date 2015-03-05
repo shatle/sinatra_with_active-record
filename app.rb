@@ -10,19 +10,23 @@ configure do
 end
 
 # === Model
-class TeamsUser < ActiveRecord::Base
-  belongs_to :user
-  belongs_to :team
-end
-
 class User < ActiveRecord::Base
   has_many :teams_users
   has_many :teams, :through => :teams_users
+
+  validates_presence_of :name
 end
 
 class Team < ActiveRecord::Base
   has_many :teams_users
   has_many :users, :through => :teams_users
+
+  validates_presence_of :name
+end
+
+class TeamsUser < ActiveRecord::Base
+  belongs_to :user
+  belongs_to :team
 end
 
 # === Fitler
@@ -30,7 +34,7 @@ before do
    content_type :json 
 end
 after do 
-  puts "response, #{response.status}"
+  # puts "response, #{response.status}"
 end
 
 # === API
