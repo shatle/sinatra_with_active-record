@@ -39,5 +39,13 @@ end
 
 # === API
 get '/' do 
-  {:a => 1, :b => { :c => 3 }}.to_json
+  {:a => 1}.to_json
+end
+
+get '/users' do 
+  User.all.to_json
+end
+
+get '/users/create' do 
+  User.create(params).to_json
 end
