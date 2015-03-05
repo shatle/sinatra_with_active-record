@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20150305162156) do
 
   create_table "teams_users", force: :cascade do |t|
     t.integer "team_id"
-    t.string  "user_id"
+    t.integer "user_id"
   end
 
   create_table "users", force: :cascade do |t|
