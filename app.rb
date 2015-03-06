@@ -2,31 +2,18 @@
 
 require "sinatra"
 require "sinatra/activerecord"
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+
+# require model
+Dir[File.dirname(__FILE__) + '/model/*.rb'].each {|file| require file }
+# require helper
+Dir[File.dirname(__FILE__) + '/helper/*.rb'].each {|file| require file }
+helpers AppHelper
+# 
 
 set :database_file, 'database.yml'
-
 configure do 
   mime_type :json, 'application/json'
-end
-
-# === Model
-class User < ActiveRecord::Base
-  has_many :teams_users
-  has_many :teams, :through => :teams_users
-
-  validates_presence_of :name
-end
-
-class Team < ActiveRecord::Base
-  has_many :teams_users
-  has_many :users, :through => :teams_users
-
-  validates_presence_of :name
-end
-
-class TeamsUser < ActiveRecord::Base
-  belongs_to :user
-  belongs_to :team
 end
 
 # === Fitler
@@ -39,7 +26,7 @@ end
 
 # === API
 get '/' do 
-  {:a => 1}.to_json
+  printTestJson
 end
 
 get '/users' do 
