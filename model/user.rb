@@ -6,14 +6,9 @@ class User < ActiveRecord::Base
 
   validates_presence_of :name, :email, :pwd
   validates_uniqueness_of :name, :email
-  validates_length_of :name, :in => 4..30
-  validates_length_of :password, :in => 6..20
-  validates_format_of     :name,
-                              :with      => /^$/i,
-                              :message  => 'email must be valid'
-  validates_format_of     :email,
-                              :with      => /^([^@"s]+)@((?:[-a-z0-9]+".)+[a-z]{2,})$/i,
-                              :message  => 'email must be valid'
+  validates_length_of :name, :in => 3..30
+  validates_format_of :name, :with => /\A[A-Za-z0-9]+\z/i
+  validates_format_of :email, :with =>  /\A[^@\s]+@([^@.\s]+\.)+[^@.\s]+\z/i
 
   # 
   # Class Methods
