@@ -8,8 +8,9 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 Dir[File.dirname(__FILE__) + '/model/*.rb'].each {|file| require file }
 # require helper
 Dir[File.dirname(__FILE__) + '/helper/*.rb'].each {|file| require file }
-helpers AppHelper
-# 
+helpers AppHelper, ResponseHelper
+# require controller
+Dir[File.dirname(__FILE__) + '/controller/*.rb'].each {|file| require file }
 
 set :database_file, 'database.yml'
 configure do 
@@ -27,12 +28,4 @@ end
 # === API
 get '/' do 
   printTestJson
-end
-
-get '/users' do 
-  User.all.to_json
-end
-
-get '/users/create' do 
-  User.create(params).to_json
 end

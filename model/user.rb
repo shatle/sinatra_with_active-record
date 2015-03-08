@@ -1,7 +1,46 @@
 # encoding: utf-8
+require 'bcrypt'
 class User < ActiveRecord::Base
   has_many :teams_users
   has_many :teams, :through => :teams_users
 
-  validates_presence_of :name
+  validates_presence_of :name, :email, :pwd
+  validates_uniqueness_of :name, :email
+  validates_length_of :name, :in => 4..30
+  validates_length_of :password, :in => 6..20
+  validates_format_of     :name,
+                              :with      => /^$/i,
+                              :message  => 'email must be valid'
+  validates_format_of     :email,
+                              :with      => /^([^@"s]+)@((?:[-a-z0-9]+".)+[a-z]{2,})$/i,
+                              :message  => 'email must be valid'
+
+  # 
+  # Class Methods
+  # 
+
+  def self.register(name, email, pwd, confirm_pwd)
+    return RESPONSE_CODE::PWD_ILLEGAL if pwd != confirm_pwd
+    salt = User.gen_salt
+    user = User.create({name: name, email: email, salt: salt, pwd: User.gen_encrypted_pwd(pwd, salt) })
+    return RESPONSE_CODE::PARAMS_ILLEGAL unless user.valid?
+    user
+  end
+
+  def self.gen_salt
+    BCrypt::Engine.generate_salt
+  end
+
+  def self.gen_encrypted_pwd(password, salt)
+    BCrypt::Engine.hash_secret(password, salt)
+  end
+
+  def self.login(login_name, pwd)
+
+  end
+
+  # 
+  # Private
+  # 
+  private 
 end

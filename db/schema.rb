@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150306141203) do
+ActiveRecord::Schema.define(version: 20150308133833) do
 
   create_table "teams", force: :cascade do |t|
     t.string   "name"
@@ -31,6 +31,10 @@ ActiveRecord::Schema.define(version: 20150306141203) do
     t.string   "secure_key"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "email"
+    t.string   "salt"
+    t.string   "token"
+    t.datetime "expired"
   end
 
 end
