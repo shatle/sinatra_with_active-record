@@ -11,7 +11,23 @@ class UserTest < Minitest::Test
     assert_equal RESPONSE_CODE::PARAMS_ILLEGAL, User.register('Tom', nil, '123', '123')
     assert_equal RESPONSE_CODE::PARAMS_ILLEGAL, User.register('To', "example@ee.com", '123456', '123456')
     assert_equal RESPONSE_CODE::PARAMS_ILLEGAL, User.register('Tom', "example", '123456', '123456')
+    assert_equal RESPONSE_CODE::PARAMS_ILLEGAL, User.register('Tom@tom', "example@ee.com", '123456', '123456')
     assert_equal true, User.register('Tom', "example@ee.com", '123456', '123456').is_a?(User)
   end
 
+  def test_login
+    # register
+    assert_equal true, User.register('Tom', "example@ee.com", '123456', '123456').is_a?(User)
+    # login
+    assert_equal RESPONSE_CODE::LOGIN_ERROR, User.login('Tom', '123457')
+    assert_equal RESPONSE_CODE::LOGIN_ERROR, User.login('Tomy', '123456')
+    assert_equal true, User.login('Tom', "123456").is_a?(User)
+    u = User.login('example@ee.com', "123456")
+    p 'user,,', u
+    assert_equal true, u.is_a?(User)
+    assert_equal true, !u.token.blank?
+    # should be 10 minutes, but test delay
+    assert_equal true, Time.now + 9.minutes < u.expired
+    assert_equal true, Time.now + 11.minutes > u.expired
+  end
 end

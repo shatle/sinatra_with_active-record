@@ -30,8 +30,17 @@ class User < ActiveRecord::Base
     BCrypt::Engine.hash_secret(password, salt)
   end
 
-  def self.login(login_name, pwd)
+  def self.gen_token
+    SecureRandom.urlsafe_base64(16)
+  end
 
+  def self.login(login_name, pwd)
+    # should be add table index: name, email
+    user = User.where({:email => login_name}).first if login_name.include? '@'
+    user ||= User.where({:name => login_name}).first
+    return RESPONSE_CODE::LOGIN_ERROR if !user || user.pwd != User.gen_encrypted_pwd(pwd, user.salt)
+    user.update_attributes({:token=>User.gen_token, :expired=> Time.now+10.minutes })
+    user
   end
 
   # 

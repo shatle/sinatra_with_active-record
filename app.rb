@@ -13,6 +13,7 @@ helpers AppHelper, ResponseHelper
 Dir[File.dirname(__FILE__) + '/controller/*.rb'].each {|file| require file }
 
 set :database_file, 'database.yml'
+
 configure do 
   mime_type :json, 'application/json'
 end
