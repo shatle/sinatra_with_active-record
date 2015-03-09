@@ -23,7 +23,6 @@ class UserTest < Minitest::Test
     assert_equal RESPONSE_CODE::LOGIN_ERROR, User.login('Tomy', '123456')
     assert_equal true, User.login('Tom', "123456").is_a?(User)
     u = User.login('example@ee.com', "123456")
-    p 'user,,', u
     assert_equal true, u.is_a?(User)
     assert_equal true, !u.token.blank?
     # should be 10 minutes, but test delay
