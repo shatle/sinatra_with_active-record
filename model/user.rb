@@ -35,11 +35,19 @@ class User < ActiveRecord::Base
   end
 
   def self.login(login_name, pwd)
-    # should be add table index: name, email
+    # should add table index: name, email
     user = User.where({:email => login_name}).first if login_name.include? '@'
     user ||= User.where({:name => login_name}).first
     return RESPONSE_CODE::LOGIN_ERROR if !user || user.pwd != User.gen_encrypted_pwd(pwd, user.salt)
-    user.update_attributes({:token=>User.gen_token, :expired=> Time.now+10.minutes })
+    return user.reload if user.update_attributes({:token=>User.gen_token, :expired=> Time.now+10.minutes })
+    return RESPONSE_CODE::LOGIN_ERROR
+  end
+
+  def self.auth(token)
+    # should add table index: token
+    user = User.find_by_token(token) 
+    return RESPONSE_CODE::AUTH_ERROR unless user 
+    return RESPONSE_CODE::AUTH_EXPIRED_ERROR if user.expired < Time.now
     user
   end
 

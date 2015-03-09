@@ -8,7 +8,8 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 Dir[File.dirname(__FILE__) + '/model/*.rb'].each {|file| require file }
 # require helper
 Dir[File.dirname(__FILE__) + '/helper/*.rb'].each {|file| require file }
-helpers AppHelper, ResponseHelper
+helpers AppHelper
+include ResponseHelper
 # require controller
 Dir[File.dirname(__FILE__) + '/controller/*.rb'].each {|file| require file }
 
@@ -28,5 +29,5 @@ end
 
 # === API
 get '/' do 
-  printTestJson
+  RESPONSE_CODE::RECORD_NOT_FOUND.to_json
 end

@@ -1,5 +1,3 @@
-
-
 class UserTest < Minitest::Test
 
   def setup
@@ -28,5 +26,15 @@ class UserTest < Minitest::Test
     # should be 10 minutes, but test delay
     assert_equal true, Time.now + 9.minutes < u.expired
     assert_equal true, Time.now + 11.minutes > u.expired
+  end
+
+  def test_auth
+    # register
+    assert_equal true, User.register('Tom', "example@ee.com", '123456', '123456').is_a?(User)
+    # login
+    u = User.login('example@ee.com', "123456")
+    assert_equal true, !u.token.blank?
+    # auth
+    assert_equal true, User.auth(u.token) == u 
   end
 end
