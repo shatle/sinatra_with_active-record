@@ -8,26 +8,33 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 Dir[File.dirname(__FILE__) + '/model/*.rb'].each {|file| require file }
 # require helper
 Dir[File.dirname(__FILE__) + '/helper/*.rb'].each {|file| require file }
-helpers AppHelper
-include ResponseHelper
 # require controller
 Dir[File.dirname(__FILE__) + '/controller/*.rb'].each {|file| require file }
-
-set :database_file, 'database.yml'
 
 configure do 
   mime_type :json, 'application/json'
 end
+set :database_file, 'database.yml'
 
-# === Fitler
-before do
-   content_type :json 
-end
-after do 
-  # puts "response, #{response.status}"
-end
+class App < Sinatra::Base
+  enable :logging
 
-# === API
-get '/' do 
-  RESPONSE_CODE::RECORD_NOT_FOUND.to_json
+  include ResponseHelper
+  helpers AppHelper
+  
+  # === Fitler
+  before do
+     content_type :json 
+  end
+  after do 
+    # puts "response, #{response.status}"
+  end
+
+  # === API
+  get '/' do 
+    RESPONSE_CODE::RECORD_NOT_FOUND.to_json
+    # "#{request.env['REMOTE_ADDR']},,, #{request.ip}"
+  end
+
+  run! if app_file == $0
 end
