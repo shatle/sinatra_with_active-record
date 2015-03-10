@@ -3,6 +3,7 @@ require 'bcrypt'
 class User < ActiveRecord::Base
   has_many :teams_users
   has_many :teams, :through => :teams_users
+  has_many :own_teams, :class_name => 'Team', :foreign_key => 'user_id'
 
   validates_presence_of :name, :email, :pwd
   validates_uniqueness_of :name, :email
